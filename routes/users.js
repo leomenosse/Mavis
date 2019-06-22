@@ -53,5 +53,9 @@ module.exports = {
 			res.render('visualization.ejs', {tableName, textAttributes, numericAttributes});
 		});
 
+	},
+
+	uploadCsvPage: (req, res) => {
+		res.render('inserirCSV.ejs');
 	}
 }
