@@ -1,240 +1,273 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Visualização - Mavis</title>
-  <meta charset="utf-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <!-- Arquivos CSS e JavaScript para o Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" crossorigin=""/>  
-  <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" crossorigin=""></script>
+    <title>MAVIS</title>
 
-  <!-- Arquivos para o plugin de zoom -->
-  <link rel="stylesheet" type="text/css" href="/stylesheets/L.Control.ZoomBar.css"/>
-  <script type="text/javascript" src="/javascripts/L.Control.ZoomBar.js"></script>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="/stylesheets/style3.css">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
 
-  <!-- Arquivo para o css da control bar -->
-  <link rel="stylesheet" type="text/css" href="/stylesheets/L.Control.Bar.css" />
-  <script src="/javascripts/L.Control.Bar.js"></script>
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 
-  <!-- Arquivos para o botão tela cheia -->
-  <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
-  <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+    <!-- Arquivos CSS e JavaScript para o Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" crossorigin=""/>  
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" crossorigin=""></script>
 
-  <!-- Configurações de estilo para o mapa se adequar ao tamanho da tela -->
-  <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no"/>
-  <style>
-    body {
-      padding: 0;
-      margin: 0;
-    }
-    html, body, #mapDIV {
-      /*
-      height: 100%;
-      width: 100vw;
-      */
-      height: 100%;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-    }
-    #getZoomButton {
-      position: absolute;
-      top: 10px;
-      left: 50px;
-      z-index: 1001;
-      font-family: Impact, Charcoal, sans-serif;
-      border-color: #000000;
-      background-color: #f5f5f5;
-    }
-  </style>
+    <!-- Arquivos para o plugin de zoom -->
+    <link rel="stylesheet" type="text/css" href="/stylesheets/L.Control.ZoomBar.css"/>
+    <script type="text/javascript" src="/javascripts/L.Control.ZoomBar.js"></script>
+
+    <!-- Arquivos para o botão tela cheia -->
+    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
 </head>
 <body>
-  <div>
-    <h3>Selecione os atributos que georeferenciam os dados</h3>
-    <p>Latitude</p>
-    <select>
-      <% for(let i = 0; i < numericAttributes.length; i++) { %>
-        <option value=<%=numericAttributes[i]%>><%=numericAttributes[i]%></option>
-      <% } %>
-    </select>
-    <p>Longitude</p>
-    <select>
-      <% for(let i = 0; i < numericAttributes.length; i++) { %>
-      <option value=<%=numericAttributes[i]%>><%=numericAttributes[i]%></option>
-      <% } %>
-    </select>
+    <!-- Plugins para o Heatmap -->
+    <script src="/javascripts/leaflet-heat.js"></script>
+    <script src="http://leaflet.github.io/Leaflet.markercluster/example/realworld.10000.js"></script>
+    <!--<script src="exemploHeatmap.js"></script>-->
 
-    <h3>Selecione um ou mais atributos para visualizar nos markers</h3>
-    <form action="">
-      <% for(let i = 0; i < textAttributes.length; i++) { %>
-        <input type="checkbox" name="group1"> <%= textAttributes[i] %><br>
-      <% } %>
-    </form>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar" style="z-index: 1001;">
+            <div id="dismiss">
+                <i class="fas fa-arrow-left"></i>
+            </div>
 
-    <br>
-    <h3>Selecione o atributo numérico utilizado para visualização de heatmap</h3>
-    <form action="">
-      <% for(let i = 0; i < numericAttributes.length; i++) { %>
-      <input type="radio" name="group2"> <%= numericAttributes[i] %><br>
-      <% } %>
-    </form>
+            <div class="sidebar-header">
+                <h3>Atributos</h3>
+            </div>
 
-    <button>Confirmar</button>
+            <ul class="list-unstyled components">
+                <p>Escolha aqui os novos atributos a serem visualizados no mapa!</p>
+                <li class="active">
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Home</a>
+                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                        <li>
+                            <a href="#">Home 1</a>
+                        </li>
+                        <li>
+                            <a href="#">Home 2</a>
+                        </li>
+                        <li>
+                            <a href="#">Home 3</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false">Pages</a>
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li>
+                            <a href="#">Page 1</a>
+                        </li>
+                        <li>
+                            <a href="#">Page 2</a>
+                        </li>
+                        <li>
+                            <a href="#">Page 3</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Portfolio</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+            </ul>
 
-  </div>
-  <div id='mapDIV'></div>
-  
+            <div id="divBotao">
+                <button type="submit" id="botao">Confirmar</button>
+            </div>
+        </nav>
 
-  <!-- criando um botão para retornar as coordenadas do local atual -->
-  <!--
-  <button id="getZoomButton" onclick="getCenterAndZoom();">Ver Coordenadas Atuais</button>
-  -->
+        <!-- Page Content  -->
+        <div id="content">
+            <!--<footer id="cabecalho">-->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin-bottom: 0px; border: solid #18bc9c; border-bottom: none;">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-info">
+                        <i class="fas fa-align-left"></i>
+                        <span>Atributos</span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
 
-  <!-- Plugins para o Heatmap -->
-  <script src="/javascripts/leaflet-heat.js"></script>
-  <!--<script src="http://leaflet.github.io/Leaflet.markercluster/example/realworld.10000.js"></script>-->
-  <script src="/javascripts/exemploHeatmap.js"></script>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent" style="color: #18bc9c; font-weight: bold; font-size: 20pt; display: block; margin-left: 925px">
+                        MAVIS
+                    </div>
+                </div>
+            </nav>
+            <!--</footer>-->
 
-  <script>
-    /* ================================= CRIAÇÃO DO MAPA ================================= */
-    /* criando um objeto de mapa */
-    var map = L.map(document.getElementById('mapDIV'), {
-      center: [-41.29042, 174.78219],
-      zoom: 8,
-      zoomSnap: 0.9,
-      zoomControl: false
-    });
+            <!--<section id="corpo">-->
+                <!-- Div do Mapa -->
+                <div id='map' style="border: solid #18bc9c;"></div>
 
-    /* adicionando o mapa base do OpenStreetMap */
-    /* http://leaflet-extras.github.io/leaflet-providers/preview/ */
-    var basemap = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-      attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
-    });
-    basemap.addTo(map);
-    /* =================================================================================== */
+                <script>
+                    /* ================================= CRIAÇÃO DO MAPA ================================= */
+                    /* criando um objeto de mapa */
+                    var map = L.map(document.getElementById('map'), {
+                      center: [-20.1438, -44.1301],
+                      zoom: 15,
+                      zoomSnap: 0.9,
+                      zoomControl: false
+                    });
 
+                    /* adicionando o mapa base do OpenStreetMap */
+                    /* http://leaflet-extras.github.io/leaflet-providers/preview/ */
+                    var basemap = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                      attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
+                    });
+                    basemap.addTo(map);
+                    /* =================================================================================== */
 
-    /* =============================== ADIÇÃO DE MARCADORES ============================== */
-    /* criando o marcador com um título */
-    var earthquakeMarker = L.marker([-20.1438, -44.1301], {
-      title: 'Janeiro 25, 2019 Desastre de Brumadinho'
-    });
-    /* adicionando um pop-up ao marcador */
-    earthquakeMarker.bindPopup("Janeiro 25, 2019 Desastre de Brumadinho");
-    /* adicionando-o ao mapa */
-    earthquakeMarker.addTo(map);
-    /* =================================================================================== */
+                    /* ================================ ADIÇÃO DE OVERLAYS =============================== */
+                    /* Interesting places */
+                    var coolPlaces = new L.LayerGroup();
 
+                    L.marker([-41.29042, 174.78219]).bindPopup('Te Papa').addTo(coolPlaces),
+                    L.marker([-41.29437, 174.78405]).bindPopup('Embassy Theatre').addTo(coolPlaces),
+                    L.marker([-41.2895, 174.77803]).bindPopup('Michael Fowler Centre').addTo(coolPlaces),
+                    L.marker([-41.28313, 174.77736]).bindPopup('Leuven Belgin Beer Cafe').addTo(coolPlaces),
+                    L.polyline([
+                      [-41.28313, 174.77736],
+                      [-41.2895, 174.77803],
+                      [-41.29042, 174.78219],
+                      [-41.29437, 174.78405]
+                    ]).addTo(coolPlaces);
+                    /* ================== */
 
-    /* ================================ ADIÇÃO DE OVERLAYS =============================== */
-    /* Interesting places */
-    var coolPlaces = new L.LayerGroup();
+                    /* HeatMap */
+                    addressPoints = addressPoints.map(  function(p) {
+                                                          return [p[0], p[1]]; 
+                                                        }
+                                                    );
+                    var heatmap = L.heatLayer(addressPoints/*, {
+                      radius: 6,
+                      blur: 8,
+                      maxZoom: 8
+                    }*/);
+                    /* ======= */
 
-    L.marker([-41.29042, 174.78219]).bindPopup('Te Papa').addTo(coolPlaces),
-    L.marker([-41.29437, 174.78405]).bindPopup('Embassy Theatre').addTo(coolPlaces),
-    L.marker([-41.2895, 174.77803]).bindPopup('Michael Fowler Centre').addTo(coolPlaces),
-    L.marker([-41.28313, 174.77736]).bindPopup('Leuven Belgin Beer Cafe').addTo(coolPlaces),
-    L.polyline([
-      [-41.28313, 174.77736],
-      [-41.2895, 174.77803],
-      [-41.29042, 174.78219],
-      [-41.29437, 174.78405]
-    ]).addTo(coolPlaces);
-    /* ================== */
+                    var overlays = {
+                      "Interesting places": coolPlaces,
+                      "HeatMap": heatmap
+                    };
+                    /* =================================================================================== */
 
-    /* HeatMap */
-    addressPoints = addressPoints.map(  function(p) {
-                                          return [p[0], p[1]]; 
-                                        }
-                                    );
-    var heatmap = L.heatLayer(addressPoints/*, {
-      radius: 6,
-      blur: 8,
-      maxZoom: 8
-    }*/);
-    /* ======= */
+                    /* ================================ ADIÇÃO DE BASEMAPS =============================== */
+                    /* criando duas novas camadas de blocos */
+                    var baserelief = L.tileLayer('https://api.maptiler.com/maps/topographique/{z}/{x}/{y}.jpg?key=ZKXT0rAu2s6WeJBxHZ4t', {
+                      attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
+                    });
+                    baserelief.addTo(map);
 
-    var overlays = {
-      "Interesting places": coolPlaces,
-      "HeatMap": heatmap
-    };
-    /* =================================================================================== */
+                    mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+                    wholink ='<a href="http://stamen.com">Stamen Design</a>';
+                    var stamenWatercolor = L.tileLayer('http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg', {
+                      attribution: '&copy; '+mapLink+' Contributors & '+wholink,
+                      maxZoom: 18,
+                    }).addTo(map);
 
+                    mapLink = '<a href="http://www.esri.com/">Esri</a>';
+                    wholink = 'i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP,\
+                              and the GIS User Community';
+                    var Esri_World_Imagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServe\
+                      r/tile/{z}/{y}/{x}', {
+                      attribution: '&copy; '+mapLink+', '+wholink,
+                      maxZoom: 18,
+                    }).addTo(map);
 
-    /* ================================ ADIÇÃO DE BASEMAPS =============================== */
-    /* criando duas novas camadas de blocos */
-    var basetopo = L.tileLayer('https://api.maptiler.com/maps/darkmatter/{z}/{x}/{y}.png?key=ZKXT0rAu2s6WeJBxHZ4t', {
-      attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
-    });
-    basetopo.addTo(map);
-
-    var baserelief = L.tileLayer('https://api.maptiler.com/maps/topographique/{z}/{x}/{y}.jpg?key=ZKXT0rAu2s6WeJBxHZ4t', {
-      attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
-    });
-    baserelief.addTo(map);
-
-    mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
-    var BlackAndWhite = L.tileLayer('http://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png', {
-      attribution: '&copy; ' + mapLink + ' Contributors',
-      maxZoom: 18,
-    }).addTo(map);
-
-    mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
-    wholink ='<a href="http://stamen.com">Stamen Design</a>';
-    var stamenWatercolor = L.tileLayer('http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg', {
-      attribution: '&copy; '+mapLink+' Contributors & '+wholink,
-      maxZoom: 18,
-    }).addTo(map);
-
-    mapLink = '<a href="http://www.esri.com/">Esri</a>';
-    wholink = 'i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP,\
-              and the GIS User Community';
-    var Esri_World_Imagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServe\
-      r/tile/{z}/{y}/{x}', {
-      attribution: '&copy; '+mapLink+', '+wholink,
-      maxZoom: 18,
-    }).addTo(map);
-
-    /* para permitir que o usuário escolha qual deles é exibido, criando um objeto para manter a descrição e a camada */
-    var baselayers = {
-      'Esri World Imagery': Esri_World_Imagery,
-      'Stamen.Watercolor': stamenWatercolor,
-      'Black and White': BlackAndWhite,
-      'Topographique': baserelief,
-      'Dark Matter': basetopo,
-      'OpenStreetMap Standard': basemap
-    };
-    /* =================================================================================== */
+                    /* para permitir que o usuário escolha qual deles é exibido, criando um objeto para manter a descrição e a camada */
+                    var baselayers = {
+                      'Esri World Imagery': Esri_World_Imagery,
+                      'Stamen.Watercolor': stamenWatercolor,
+                      'Topographique': baserelief,
+                      'OpenStreetMap Standard': basemap
+                    };
+                    /* =================================================================================== */
 
 
-    /* ================= ADIÇÃO DE BASEMAPS E OVERLAYS AO LAYERS CONTROL ================= */
-    L.control.layers(baselayers,overlays).addTo(map);
+                    /* ================= ADIÇÃO DE BASEMAPS E OVERLAYS AO LAYERS CONTROL ================= */
+                    L.control.layers(baselayers,overlays).addTo(map);
+                    /* =================================================================================== */
+
+                    /* =============================== ADIÇÃO DE MARCADORES ============================== */
+                    /* criando o marcador com um título */
+                    var earthquakeMarker = L.marker([-20.1438, -44.1301], {
+                      title: 'Janeiro 25, 2019 Desastre de Brumadinho'
+                    });
+                    /* adicionando um pop-up ao marcador */
+                    earthquakeMarker.bindPopup("Janeiro 25, 2019 Desastre de Brumadinho");
+                    /* adicionando-o ao mapa */
+                    earthquakeMarker.addTo(map);
+                    /* =================================================================================== */
+
+                    /* ======================== ADIÇÕES ÀS FUNCIONALIDADES DO MAPA ======================= */
+                    /* criando o ícone de zoom */
+                    var zoom_bar = new L.Control.ZoomBar({
+                      position: 'topleft'
+                    }).addTo(map);
+
+                    /* adicionando uma barra de escala (canto inferior esquerdo) */
+                    var scale = L.control.scale()
+                    scale.addTo(map);
 
 
-    /* ======================== ADIÇÕES ÀS FUNCIONALIDADES DO MAPA ======================= */
-    /* criando o ícone de zoom */
-    var zoom_bar = new L.Control.ZoomBar({
-      position: 'topleft'
-    }).addTo(map);
+                    /* adicionando botão de tela cheia */
+                    map.addControl(new L.Control.Fullscreen({
+                      title: {
+                          'false': 'View Fullscreen',
+                          'true': 'Exit Fullscreen'
+                      }
+                    }));
+                    /* =================================================================================== */
+                </script>
+            <!--</section>-->
+        </div>
+    </div>
 
-    /* função para o botão retornar as coordenadas do local atual */
-    function getCenterAndZoom(){
-      alert("Latitude: "+map.getCenter().lat+"\nLongitude: "+map.getCenter().lng+"\nTamanho do Zoom: "+map.getZoom());
-    }
+    <div class="overlay"></div>
 
-    /* adicionando uma barra de escala (canto inferior esquerdo) */
-    var scale = L.control.scale()
-    scale.addTo(map);
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <!-- jQuery Custom Scroller CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 
-    map.addControl(new L.Control.Fullscreen({
-      title: {
-          'false': 'View Fullscreen',
-          'true': 'Exit Fullscreen'
-      }
-    }));
-    /* =================================================================================== */
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
 
-    
-  </script>
+            $('#dismiss, .overlay').on('click', function () {
+                $('#sidebar').removeClass('active');
+                $('.overlay').removeClass('active');
+            });
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').addClass('active');
+                $('.overlay').addClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
 </body>
 </html>
