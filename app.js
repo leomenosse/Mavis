@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 
-const {connectionPage, connectToDB, tablesPage, visualizationPage, uploadCsvPage, manipulateCsv} = require('./routes/users');
+const {connectionPage, connectToDB, tablesPage, visualizationPage, manipulateVisualization, uploadCsvPage, manipulateCsv} = require('./routes/users');
 const {getHomePage} = require('./routes/index');
 const port = 3000;
 
@@ -21,6 +21,7 @@ app.get('/connection', connectionPage);
 app.post('/connection', connectToDB);
 app.get('/selectTable', tablesPage);
 app.get('/visualization/:tableName', visualizationPage);
+app.post('/visualization/:tableName', manipulateVisualization);
 app.get('/upload', uploadCsvPage);
 app.post('/upload', manipulateCsv)
 

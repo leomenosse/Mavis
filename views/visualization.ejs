@@ -47,61 +47,65 @@
                 <h3>Atributos</h3>
             </div>
 
+            <!-- <form method="POST"> -->
             <ul class="list-unstyled components">
                 <p>Escolha aqui os novos atributos a serem visualizados no mapa!</p>
                 <!-- <li class="active"> -->
-                
-                <li>
-                    <a href="#latitudeSubmenu" data-toggle="collapse" aria-expanded="false">Latitude</a>
-                    <ul class="collapse list-unstyled" id="latitudeSubmenu">
-                        <!-- Dropdown -->
-                        <select style="margin-left: 20px;" id="selectLatitude">
-                            <% for(let i = 0; i < numericAttributes.length; i++) { %>
-                                <option value="<%=numericAttributes[i]%>"><%=numericAttributes[i]%></option>
+                <form method="POST" action="/visualization/<%= tableName %>">
+                    <li>
+                        <a href="#latitudeSubmenu" data-toggle="collapse" aria-expanded="false">Latitude</a>
+                        <ul class="collapse list-unstyled" id="latitudeSubmenu">
+                            <!-- Dropdown -->
+                            <select style="margin-left: 20px;" id="selectLatitude" name="latitude">
+                                <% for(let i = 0; i < numericAttributes.length; i++) { %>
+                                    <option value="<%=numericAttributes[i]%>"><%=numericAttributes[i]%></option>
+                                <% } %>
+                            </select>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#longitudeSubmenu" data-toggle="collapse" aria-expanded="false">Longitude</a>
+                        <ul class="collapse list-unstyled" id="longitudeSubmenu">
+                            <!-- Dropdown -->
+                            <select style="margin-left: 20px;" id="selectLongitude" name="longitude">
+                                <% for(let i = 0; i < numericAttributes.length; i++) { %>
+                                    <option value="<%=numericAttributes[i]%>"><%=numericAttributes[i]%></option>
+                                <% } %>
+                            </select>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#textAttrSubmenu" data-toggle="collapse" aria-expanded="false">Atributos nominais</a>
+                        <ul class="collapse list-unstyled" id="textAttrSubmenu">
+                            <!-- Checkboxes -->
+                            <% for(let i = 0; i < textAttributes.length; i++) { %>
+                                <div class="form-check" style="margin-left: 20px;">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input" name="textAttr" value="<%=textAttributes[i]%>"><%=textAttributes[i]%>
+                                    </label>
+                                </div>
                             <% } %>
-                        </select>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#longitudeSubmenu" data-toggle="collapse" aria-expanded="false">Longitude</a>
-                    <ul class="collapse list-unstyled" id="longitudeSubmenu">
-                        <!-- Dropdown -->
-                        <select style="margin-left: 20px;" id="selectLongitude">
-                            <% for(let i = 0; i < numericAttributes.length; i++) { %>
-                                <option value="<%=numericAttributes[i]%>"><%=numericAttributes[i]%></option>
-                            <% } %>
-                        </select>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#textAttrSubmenu" data-toggle="collapse" aria-expanded="false">Atributos nominais</a>
-                    <ul class="collapse list-unstyled" id="textAttrSubmenu">
-                        <!-- Checkboxes -->
-                        <% for(let i = 0; i < textAttributes.length; i++) { %>
-                            <div class="form-check" style="margin-left: 20px;">
-                                <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input" name="textAttr" value="<%=textAttributes[i]%>"><%=textAttributes[i]%>
-                                </label>
-                            </div>
-                        <% } %>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#numericAttrSubmenu" data-toggle="collapse" aria-expanded="false">Atributo numérico</a>
-                    <ul class="collapse list-unstyled" id="numericAttrSubmenu">
-                        <!-- Radio Buttons -->
-                        <form action="" style="margin-left: 20px;">
-                            <% for(let i = 0; i < numericAttributes.length; i++) { %>
-                            <input type="radio" name="numericAttr" value="<%=numericAttributes[i]%>"> <%=numericAttributes[i]%><br>
-                            <% } %>
-                        </form>
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#numericAttrSubmenu" data-toggle="collapse" aria-expanded="false">Atributo numérico</a>
+                        <ul class="collapse list-unstyled" id="numericAttrSubmenu">
+                            <!-- Radio Buttons -->
+                            <!-- <form action="" style="margin-left: 20px;"> -->
+                                <% for(let i = 0; i < numericAttributes.length; i++) { %>
+                                <input type="radio" name="numericAttr" value="<%=numericAttributes[i]%>"> <%=numericAttributes[i]%><br>
+                                <% } %>
+                            <!-- </form> -->
+                        </ul>
+                    </li>
+                    <div id="divBotao">
+                        
+                        <button type="submit" id="confirmar">Confirmar</button>
+                    </div>
+                </form>
             </ul>
 
-            <div id="divBotao">
-                <button type="submit" id="confirmar">Confirmar</button>
-            </div>
+            <!-- </form> -->
         </nav>
 
         <!-- Page Content  -->
@@ -283,23 +287,24 @@
 
             $("#confirmar").click(function () {
                 // Manipulação da longitude
-                alert('Latitude: ' + $("#selectLatitude option:selected").text());
+                let latitudeField = $("#selectLatitude option:selected").text()
 
                 // Manipulação da longitude
-                alert('Longitude: '+$("#selectLongitude option:selected").text());
+                let longitudeField = $("#selectLongitude option:selected").text();
 
                 // Manipulação dos atributos de texto
                 let textAttributes = [];
                 $.each($("input[name='textAttr']:checked"), function(){
                     textAttributes.push($(this).val());
                 });
-                alert('Atributos a irem nos markers: '+textAttributes);
 
                 // Manipulação dos atributos numéricos
-                let radioValue = $("input[name=numericAttr]:checked").val();
-                if(radioValue)
-                    alert('Radio value is ' + radioValue);
-                else alert('Nenhum radio button foi selecionado');
+                let numericAttributes = $("input[name=numericAttr]:checked").val();
+                if(numericAttributes){
+                    
+                }
+
+
             });
         });
     </script>

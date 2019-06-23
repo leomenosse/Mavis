@@ -55,6 +55,28 @@ module.exports = {
 
 	},
 
+	manipulateVisualization: (req, res) => {
+		let tableName = req.params.tableName;
+		let latitudeField = req.body.latitude;
+		let longitudeField = req.body.longitude;
+		let markerAttributes = req.body.textAttr;
+		let numericAttribute = req.body.numericAttr;
+
+		sql.separarEmTextoENumero(con, tableName, (textAttributes, numericAttributes) => {
+			console.log(textAttributes);
+			console.log(numericAttributes);
+
+			res.render('visualization.ejs', { tableName, 
+				textAttributes, 
+				numericAttributes,
+				latitudeField,
+				longitudeField,
+				markerAttributes,
+				numericAttribute });
+		});
+		
+	},
+
 	uploadCsvPage: (req, res) => {
 		message = '';
 		res.render('inserirCSV.ejs', {message});
