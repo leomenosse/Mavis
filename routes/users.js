@@ -56,6 +56,26 @@ module.exports = {
 	},
 
 	uploadCsvPage: (req, res) => {
-		res.render('inserirCSV.ejs');
+		message = '';
+		res.render('inserirCSV.ejs', {message});
+	},
+
+	manipulateCsv: (req, res) => {
+		// if(!req.files){
+		// 	return res.status(400).send("No files were uploaded.");
+		// }
+
+		let uploadedFile = req.files.uploadedFile;
+		let fileExtension = uploadedFile.mimetype.split('/')[1];
+		console.log(fileExtension);
+
+		if (uploadedFile.mimetype === 'text/csv' || uploadedFile.mimetype === 'text/plain' || uploadedFile.mimetype === 'application/vnd.ms-excel'){
+			//manipulação do csv
+			console.log(uploadedFile);
+		}
+		else{
+			message = "Formato de arquivo é inválido. Apenas '.csv' e '.txt' são permitidos"
+			res.render('inserirCSV.ejs', {message});
+		}
 	}
 }

@@ -32,8 +32,14 @@
     <section id="contact"><div class="container" style="height: 220px;">
     <h2 class="text-uppercase text-center text-secondary mb-0">Selecione os seus arquivos e depois confirme-os</h2>
     <hr class="star-dark mb-5" />
-    <button class="btn btn-primary" type="submit" style="margin-left: 400px; margin-right: 72px; width: 120px;">Selecionar</button>
-    <button class="btn btn-primary" type="submit" style="width: 120px;">Enviar</button>
+    <form method="post" enctype="multipart/form-data" accept=".csv">
+        <input type="file" name="uploadedFile" required>
+        <input type="submit" class="btn btn-primary float-right" value="Enviar" />
+        <!-- <button type="submit" class="btn btn-primary float-right">Enviar</button> -->
+    </form>
+    <div>
+        <p><%= message %></p>
+    </div>
 </div></section>
     <section id="about" class="bg-primary text-white mb-0">
         <div class="container">
