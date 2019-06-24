@@ -149,3 +149,12 @@ exports.separarEmTextoENumero = function separarEmTextoENumero(con, tableName, c
         callback(textAttributes, numericAttributes);
     })
 }
+
+exports.selecionarAtributo = function selecionarAtributo(con, tableName, attribute, callback){
+    let sql = 'SELECT '+attribute+' FROM '+tableName;
+
+    con.query(sql, function(err, result){
+        if (err) throw err;
+        callback(result);
+    })
+}

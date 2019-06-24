@@ -5,7 +5,7 @@ const path = require('path');
 const app = express();
 
 const {connectionPage, connectToDB, tablesPage, visualizationPage, manipulateVisualization, uploadCsvPage, manipulateCsv} = require('./routes/users');
-const {getHomePage} = require('./routes/index');
+const {getLoginPage, getSignUpPage, getHomePage} = require('./routes/index');
 const port = 3000;
 
 app.set('port', process.env.port || port);
@@ -16,6 +16,8 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '/public'))); // configure express to use public folder
 app.use(fileUpload());
 
+app.get('/login', getLoginPage);
+app.get('/cadastro', getSignUpPage);
 app.get('/', getHomePage);
 app.get('/connection', connectionPage);
 app.post('/connection', connectToDB);

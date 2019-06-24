@@ -62,6 +62,14 @@ module.exports = {
 		let markerAttributes = req.body.textAttr;
 		let numericAttribute = req.body.numericAttr;
 
+		console.log(latitudeField);
+
+		sql.selecionarAtributo(con, tableName, latitudeField, (result) => {
+			for(let i = 0; i < result.length; i++){
+				console.log(result[i][latitudeField]);
+			}
+		});
+
 		sql.separarEmTextoENumero(con, tableName, (textAttributes, numericAttributes) => {
 			console.log(textAttributes);
 			console.log(numericAttributes);
@@ -73,6 +81,7 @@ module.exports = {
 				longitudeField,
 				markerAttributes,
 				numericAttribute });
+
 		});
 		
 	},
