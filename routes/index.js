@@ -1,6 +1,6 @@
 module.exports = {
-	getLoginPage: (req, res) => {
-		res.render('login.ejs');
+	getMainPage: (req, res) => {
+		res.render('index.ejs');
 	},
 
 	getSignUpPage: (req, res) => {
@@ -8,6 +8,6 @@ module.exports = {
 	},
 
 	getHomePage: (req, res) => {
-		res.render('index.ejs');
+		res.render('login.ejs');
 	}
 }

@@ -93,14 +93,14 @@
                             <!-- Radio Buttons -->
                             <!-- <form action="" style="margin-left: 20px;"> -->
                                 <% for(let i = 0; i < numericAttributes.length; i++) { %>
-                                <input type="radio" name="numericAttr" value="<%=numericAttributes[i]%>"> <%=numericAttributes[i]%><br>
+                                <input style="margin-left: 20px;" type="radio" name="numericAttr" value="<%=numericAttributes[i]%>"> <%=numericAttributes[i]%><br>
                                 <% } %>
                             <!-- </form> -->
                         </ul>
                     </li>
                     <div id="divBotao">
                         
-                        <button type="submit" id="confirmar">Confirmar</button>
+                        <button type="submit" id="confirmar" disabled="true" style="margin-top: 20px;">Confirmar</button>
                     </div>
                 </form>
             </ul>
@@ -136,8 +136,8 @@
                     /* ================================= CRIAÇÃO DO MAPA ================================= */
                     /* criando um objeto de mapa */
                     var map = L.map(document.getElementById('map'), {
-                      center: [-20.1438, -44.1301],
-                      zoom: 15,
+                      center: [-39.2727, 175.5802],
+                      zoom: 7,
                       zoomSnap: 0.9,
                       zoomControl: false
                     });
@@ -154,7 +154,7 @@
                     /* Interesting places */
                     var coolPlaces = new L.LayerGroup();
 
-                    L.marker([-41.29042, 174.78219]).bindPopup('Te Papa').addTo(coolPlaces),
+                    L.marker([-41.29042, 174.78219]).bindPopup('Te Papa<br>55 Cable St, Te Aro, Wellington 6011, Nova Zelândia').addTo(coolPlaces),
                     L.marker([-41.29437, 174.78405]).bindPopup('Embassy Theatre').addTo(coolPlaces),
                     L.marker([-41.2895, 174.77803]).bindPopup('Michael Fowler Centre').addTo(coolPlaces),
                     L.marker([-41.28313, 174.77736]).bindPopup('Leuven Belgin Beer Cafe').addTo(coolPlaces),
@@ -171,11 +171,11 @@
                                                           return [p[0], p[1]]; 
                                                         }
                                                     );
-                    var heatmap = L.heatLayer(addressPoints/*, {
-                      radius: 6,
-                      blur: 8,
-                      maxZoom: 8
-                    }*/);
+                    var heatmap = L.heatLayer(addressPoints, {
+                      radius: 7,
+                      blur: 10,
+                      maxZoom: 12
+                    });
                     /* ======= */
 
                     var overlays = {
