@@ -108,5 +108,29 @@ module.exports = {
 			message = "Formato de arquivo é inválido. Apenas '.csv' e '.txt' são permitidos"
 			res.render('inserirCSV.ejs', {message});
 		}
+	},
+
+	signUpUser: (req, res) => {
+		//criando a conexão com o banco de dados onde registramos os usuarios
+		let signUpCon = mysql.createConnection({
+			host: 'localhost',
+			user: 'root',
+			password: '123456',
+			database: 'usuarios_mavis'
+		});
+
+		let usuario = req.body.usuario;
+		let email = req.body.email;
+		let senha = req.body.senha;
+		console.log(usuario);
+		console.log(email);
+		console.log(senha);
+
+		signUpCon.connect((err, result) => {
+			if (err) throw err;
+			console.log('Conexão realizada com sucesso');
+
+			signUpCon.query('INSERT INTO usuarios VALUES(\"' + usuario + '\",\"' + email + '\",\"' + senha + '\")');
+		});
 	}
 }
