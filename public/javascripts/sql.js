@@ -158,3 +158,18 @@ exports.selecionarAtributo = function selecionarAtributo(con, tableName, attribu
         callback(result);
     })
 }
+
+exports.montarQuery = function montarQuery(attributes, tableName){
+    let sql = 'SELECT ';
+
+    for(let i = 0; i < attributes.length; i++){
+        sql += '`' + attributes[i] + '`';
+        if(i !== attributes.length - 1){
+            sql += ', '
+        }
+    }
+
+    sql += ' FROM ' + tableName;
+
+    return sql;
+}

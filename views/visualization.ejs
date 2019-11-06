@@ -100,7 +100,7 @@
                     </li>
                     <div id="divBotao">
                         
-                        <button type="submit" id="confirmar" disabled="true" style="margin-top: 20px;">Confirmar</button>
+                        <button type="submit" id="confirmar" style="margin-top: 20px;">Confirmar</button>
                     </div>
                 </form>
             </ul>
@@ -136,7 +136,7 @@
                     /* ================================= CRIAÇÃO DO MAPA ================================= */
                     /* criando um objeto de mapa */
                     var map = L.map(document.getElementById('map'), {
-                      center: [-39.2727, 175.5802],
+                      center: [-22.231, -24.1],
                       zoom: 7,
                       zoomSnap: 0.9,
                       zoomControl: false
@@ -271,6 +271,17 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+
+            let lat = $("#latValues").html();
+            let long = $("#longValues").html();
+            let text = $("#textValues").html();
+            let intensity = $("#numericValues").html();
+
+            console.log(lat);
+            console.log(long);
+            console.log(text);
+            console.log(intensity);
+
             $("#sidebar").mCustomScrollbar({
                 theme: "minimal"
             });
@@ -286,49 +297,7 @@
                 $('.collapse.in').toggleClass('in');
                 $('a[aria-expanded=true]').attr('aria-expanded', 'false');
             });
-
-            $("#confirmar").click(function () {
-
-                
-                // Manipulação da longitude
-                let latitudeField = $("#selectLatitude option:selected").text();
-                
-                // Manipulação da longitude
-                let longitudeField = $("#selectLongitude option:selected").text();
-                
-                // Manipulação dos atributos de texto
-                let textAttributes = [];
-                $.each($("input[name='textAttr']:checked"), function(){
-                    textAttributes.push($(this).val());
-                });
-                
-                // Manipulação dos atributos numéricos
-                let numericAttributes = $("input[name=numericAttr]:checked").val();
-                if(numericAttributes){
-                    
-                }
-                
-                let data = {
-                    latitudeField: latitudeField,
-                    longitudeField: longitudeField,
-                    textAttributes: textAttributes,
-                    numericAttributes: numericAttributes
-                }
-
-                $.ajax({
-                    type: 'post',
-                    url: '/visualization/<&= tableName %>',
-                    data: data,
-                    dataType: 'text',
-                    success: function(result){
-                        console.log(result)
-                    }
-                })
-                .done(function(data){
-                    console.log(data);
-                })
-
-            });
+            
         });
     </script>
 </body>

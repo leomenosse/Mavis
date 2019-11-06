@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const sql = require('../public/javascripts/sql.js');
+const { promisify } = require('util');
 
 module.exports = {
 	connectionPage: (req, res) => {
@@ -55,34 +56,61 @@ module.exports = {
 
 	},
 
-	manipulateVisualization: (req, res) => {
-		let tableName = req.params.tableName;
-		let latitudeField = req.body.latitude;
-		let longitudeField = req.body.longitude;
-		let markerAttributes = req.body.textAttr;
-		let numericAttribute = req.body.numericAttr;
+	manipulateVisualization: async (req, res) => {
 
-		console.log(latitudeField);
+		let data = {
+			tableName: req.params.tableName,
+			latitudeField: req.body.latitude,
+			longitudeField: req.body.longitude,
+			textAttr: req.body.textAttr,
+			numericAttr: req.body.numericAttr
+		}
+		let latValues = [];
+		let longValues = [];
+		let textValues = [];
+		let numericValues = [];
 
-		sql.selecionarAtributo(con, tableName, latitudeField, (result) => {
-			for(let i = 0; i < result.length; i++){
-				console.log(result[i][latitudeField]);
+		console.log(data);
+
+		const syncQuery = promisify(con.query).bind(con);
+
+		// DANDO SELECT NA LATITUDE E COLOCANDO NUM VETOR
+		try{
+			let resultLat = await syncQuery('SELECT `' + data.latitudeField + '` FROM ' + data.tableName);
+			for (let i = 0; i < resultLat.length; i++) {
+				latValues.push(resultLat[i][data.latitudeField]);
 			}
-		});
 
-		sql.separarEmTextoENumero(con, tableName, (textAttributes, numericAttributes) => {
-			console.log(textAttributes);
-			console.log(numericAttributes);
+			let resultLong = await syncQuery('SELECT `' + data.longitudeField + '` FROM ' + data.tableName);
+			for (let i = 0; i < resultLong.length; i++) {
+				longValues.push(resultLong[i][data.longitudeField]);
+			}
 
-			res.render('visualization.ejs', { tableName, 
-				textAttributes, 
-				numericAttributes,
-				latitudeField,
-				longitudeField,
-				markerAttributes,
-				numericAttribute });
+			let sqlSelect = sql.montarQuery(data.textAttr, data.tableName);
+			let resultTextAttr = await syncQuery(sqlSelect);
+			for(let i = 0; i < resultTextAttr.length; i++){
+				let text = '';
+				for (let key in resultTextAttr[i]){
+					text += resultTextAttr[i][key] + '<br>';
+				}
+				textValues.push(text);
+			}
 
-		});
+			let resultNumericAttr = await syncQuery('SELECT `' + data.numericAttr + '` FROM ' + data.tableName);
+			for(let i = 0; i < resultNumericAttr.length; i++){
+				numericValues.push(resultNumericAttr[i][data.numericAttr]);
+			}
+
+			console.log(latValues);
+			console.log(longValues);
+			console.log(textValues);
+			console.log(numericValues);
+
+			res.render('visualization.ejs', { latValues, longValues, textValues, numericValues });
+		}
+		catch(e){
+			console.log(e);
+		}		
 		
 	},
 
